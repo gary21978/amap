@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>地铁线路图</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://webapi.amap.com/maps?v=1.4.7&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.Driving,AMap.LineSearch"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script language="javascript">
+    //基本地图加载
+    var map = new AMap.Map("container", {
+        center: [121.484729,31.255488],  
+        zoom: 9,
+    });
+   map.setMapStyle('amap://styles/darkblue');
+   map.setFeatures(['bg','point']); //,'point','road'
+ 
+    /*线路查询*/
+    function lineSearch(number,linecolor) {
+        var linesearch = new AMap.LineSearch({
+            pageIndex: 1,
+            city: '上海',
+            pageSize: 4,
+            extensions: 'all'
+        });
+        linesearch.search(number, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                lineSearch_Callback(result,linecolor);
+            } else {
+                alert(result);
+            }
+        });
+    }
+
+    function lineSearchGeneral(cityname, number,linecolor) {
+        var linesearch = new AMap.LineSearch({
+            pageIndex: 1,
+            city: cityname,
+            pageSize: 3,
+            extensions: 'all'
+        });
+        linesearch.search(number, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                lineSearch_Callback(result,linecolor);
+            } else {
+                alert(result);
+            }
+        });
+    }
+    
+    /*公交路线查询服务返回数据解析概况*/
+    function lineSearch_Callback(data,linecolor) {
+        var lineArr = data.lineInfo;
+        var lineNum = data.lineInfo.length;
+        for (var j = 0;j < lineNum;++j)
+        {
+                var pathArr = lineArr[j].path;
+                var stops = lineArr[j].via_stops;
+
+	        for (var i = 0;i < stops.length;++i)
+          {
+                    var circleMarker = new AMap.CircleMarker({
+                          map:map,
+			                    center:stops[i].location,
+                          radius: 3,
+                          fillColor:'white',
+                          strokeColor:linecolor,
+                          strokeWeight:2
+			});}
+        busPolyline = new AMap.Polyline({
+		    map: map,
+		    path: pathArr,
+		    strokeColor: linecolor,//线颜色
+		    strokeOpacity: 10,//线透明度
+		    strokeWeight: 1//线宽
+		});}}
+
+ 
+    gray = "#bbb";
+    lineSearch('地铁1号线',"#dc0040");
+    lineSearch('地铁2号线',"#8cc745");
+    lineSearch('地铁3号线',"#f2d12b");
+    lineSearch('地铁4号线',"#52288a");
+    lineSearch('地铁5号线',"#8c51a0");
+    lineSearch('地铁6号线',"#cc0074");
+    lineSearch('地铁7号线',"#e76b32");
+    lineSearch('地铁8号线',"#459cd8");
+    lineSearch('地铁9号线',"#88c7ec");
+    lineSearch('地铁10号线',"#baa4d0");
+    lineSearch('地铁11号线',"#761e36");
+    lineSearch('地铁12号线',"#2b7a60");
+    lineSearch('地铁13号线',"#ba79a2");
+    lineSearch('地铁16号线',"#a7d5c4");
+    lineSearch('地铁17号线',"#b8767a");  
+    lineSearch('浦江线',"#7f899a");
+    /*2018年预计通车地铁线路*/
+    lineSearch('地铁5号线南延伸段',"#8c51a0");
+    lineSearch('地铁13号线二期',"#ba79a2");
+    /*2019年预计通车地铁线路*/
+    lineSearch('地铁10号线二期',gray);
+    /*2020年预计通车地铁线路*/
+    lineSearch('地铁14号线',gray);
+    lineSearch('地铁15号线',gray);
+    lineSearch('地铁18号线',gray);
+
+    lineSearchGeneral('苏州','轨道交通1号线',"#63cb8f");
+    lineSearchGeneral('苏州','轨道交通2号线',"#ff0000");
+    lineSearchGeneral('苏州','轨道交通4号线',"#6487c8");
+    lineSearchGeneral('苏州','轨道交通4号线支线',"#6487c8");
+    lineSearchGeneral('苏州','轨道交通3号线',gray); //2019
+    lineSearchGeneral('苏州','轨道交通5号线',gray); //2021
+    lineSearchGeneral('苏州','轨道交通S1号线',gray);
+
+    lineSearchGeneral('南通','地铁1号线',gray);
+    lineSearchGeneral('南通','地铁2号线',gray);
+
+    lineSearchGeneral('无锡','地铁1号线',"#eb001c");
+    lineSearchGeneral('无锡','地铁2号线',"#00bd47");
+    lineSearchGeneral('无锡','地铁3号线',gray);
+    lineSearchGeneral('无锡','地铁4号线',gray);
+
+    lineSearchGeneral('常州','地铁1号线',gray); // 2019
+    lineSearchGeneral('常州','地铁2号线',gray); // 2020
+
+    lineSearchGeneral('杭州','地铁1号线',"#f25f76");
+    lineSearchGeneral('杭州','地铁2号线',"#e47c42");
+    lineSearchGeneral('杭州','地铁4号线',"#00e051");
+    lineSearchGeneral('杭州','地铁5号线',gray); // 2019
+    lineSearchGeneral('杭州','地铁6号线',gray); // 2020
+    lineSearchGeneral('杭州','地铁9号线',gray); // 2020
+    lineSearchGeneral('杭州','地铁3号线',gray); // 2019
+    lineSearchGeneral('杭州','地铁7号线',gray); // 2020
+    lineSearchGeneral('杭州','地铁8号线',gray); // 2020
+
+    lineSearchGeneral('绍兴','轨道交通1号线',gray);
+
+    lineSearchGeneral('南京','地铁1号线',"#607fb8");
+    lineSearchGeneral('南京','地铁2号线',"#bc6473");
+    lineSearchGeneral('南京','地铁3号线',"#5dbd98");
+    lineSearchGeneral('南京','地铁4号线',"#a764c3");
+    lineSearchGeneral('南京','地铁10号线',"#c49865");
+    lineSearchGeneral('南京','地铁S1号线',"#68d4c6");
+    lineSearchGeneral('南京','地铁S3号线',"#ee00b3");
+    lineSearchGeneral('南京','地铁S7号线',"#c881ac");
+    lineSearchGeneral('南京','地铁S8号线',"#e47c42");
+    lineSearchGeneral('南京','地铁S9号线',"#b7af92");
+
+    //lineSearchGeneral('南京','地铁7号线',gray); // 2021
+    lineSearchGeneral('南京','地铁5号线',gray); // 2022
+    lineSearchGeneral('南京','(规划)地铁6号线',gray); // 2022
+    lineSearchGeneral('南京','地铁S5号线',gray);
+    lineSearchGeneral('南京','地铁S6号线',gray);
+    //lineSearchGeneral('南京','地铁9号线',gray);
+    lineSearchGeneral('南京','地铁11号线',gray);
+
+    lineSearchGeneral('宁波','轨道交通1号线',"#2e73b5");
+    lineSearchGeneral('宁波','轨道交通2号线',"#fa0038");
+    lineSearchGeneral('宁波','轨道交通3号线',gray);
+    lineSearchGeneral('宁波','轨道交通4号线',gray);
+    lineSearchGeneral('宁波','轨道交通5号线',gray);
+
+    lineSearchGeneral('徐州','地铁1号线',gray);
+    lineSearchGeneral('徐州','地铁2号线',gray);
+    lineSearchGeneral('徐州','地铁3号线',gray);
+</script>
+</body>
+</html>
