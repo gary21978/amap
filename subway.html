@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>地铁线路图</title>
+    <title>轨道交通线路图</title>
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
     <script src="http://webapi.amap.com/maps?v=1.4.7&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.Driving,AMap.LineSearch"></script>
     <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
@@ -13,32 +13,35 @@
 <body>
 <div id="container"></div>
 <script language="javascript">
-    //基本地图加载
+    // 基本地图加载
     var map = new AMap.Map("container", {
         center: [121.484729,31.255488],  
         zoom: 9,
     });
-   map.setMapStyle('amap://styles/darkblue');
-   map.setFeatures(['bg','point']); //,'point','road'
+    map.setMapStyle('amap://styles/darkblue');
+    map.setFeatures(['bg','point']); //,'point','road'
  
-    /*线路查询*/
-    function lineSearch(number,linecolor) {
+
+    planned = "#bbb";
+    commuter = "#22f";
+    // 线路查询
+    function lineSearch(cityname, number,linecolor) {
         var linesearch = new AMap.LineSearch({
             pageIndex: 1,
-            city: '上海',
-            pageSize: 4,
+            city: cityname,
+            pageSize: 1,
             extensions: 'all'
         });
         linesearch.search(number, function(status, result) {
             if (status === 'complete' && result.info === 'OK') {
                 lineSearch_Callback(result,linecolor);
             } else {
-                alert(result);
+                alert(number);
             }
         });
     }
 
-    function lineSearchGeneral(cityname, number,linecolor) {
+    function lineMultiSearch(cityname, number,linecolor) {
         var linesearch = new AMap.LineSearch({
             pageIndex: 1,
             city: cityname,
@@ -49,7 +52,7 @@
             if (status === 'complete' && result.info === 'OK') {
                 lineSearch_Callback(result,linecolor);
             } else {
-                alert(result);
+                alert(number);
             }
         });
     }
@@ -60,114 +63,298 @@
         var lineNum = data.lineInfo.length;
         for (var j = 0;j < lineNum;++j)
         {
-                var pathArr = lineArr[j].path;
-                var stops = lineArr[j].via_stops;
+            var pathArr = lineArr[j].path;
+            var stops = lineArr[j].via_stops;
 
 	        for (var i = 0;i < stops.length;++i)
-          {
-                    var circleMarker = new AMap.CircleMarker({
-                          map:map,
-			                    center:stops[i].location,
-                          radius: 3,
-                          fillColor:'white',
-                          strokeColor:linecolor,
-                          strokeWeight:2
+            {
+                var circleMarker = new AMap.CircleMarker({
+                            map:map,
+                            center: stops[i].location,
+                            radius: 2,
+                            fillColor:'white',
+                            strokeColor:linecolor,
+                            strokeWeight:2    
 			});}
-        busPolyline = new AMap.Polyline({
-		    map: map,
-		    path: pathArr,
-		    strokeColor: linecolor,//线颜色
-		    strokeOpacity: 10,//线透明度
-		    strokeWeight: 1//线宽
-		});}}
 
- 
-    gray = "#bbb";
-    lineSearch('地铁1号线',"#dc0040");
-    lineSearch('地铁2号线',"#8cc745");
-    lineSearch('地铁3号线',"#f2d12b");
-    lineSearch('地铁4号线',"#52288a");
-    lineSearch('地铁5号线',"#8c51a0");
-    lineSearch('地铁6号线',"#cc0074");
-    lineSearch('地铁7号线',"#e76b32");
-    lineSearch('地铁8号线',"#459cd8");
-    lineSearch('地铁9号线',"#88c7ec");
-    lineSearch('地铁10号线',"#baa4d0");
-    lineSearch('地铁11号线',"#761e36");
-    lineSearch('地铁12号线',"#2b7a60");
-    lineSearch('地铁13号线',"#ba79a2");
-    lineSearch('地铁16号线',"#a7d5c4");
-    lineSearch('地铁17号线',"#b8767a");  
-    lineSearch('浦江线',"#7f899a");
-    /*2018年预计通车地铁线路*/
-    lineSearch('地铁5号线南延伸段',"#8c51a0");
-    lineSearch('地铁13号线二期',"#ba79a2");
-    /*2019年预计通车地铁线路*/
-    lineSearch('地铁10号线二期',gray);
-    /*2020年预计通车地铁线路*/
-    lineSearch('地铁14号线',gray);
-    lineSearch('地铁15号线',gray);
-    lineSearch('地铁18号线',gray);
+            if (linecolor == planned)
+                opacity = 0.3;
+            else 
+                opacity = 1.0;
+            busPolyline = new AMap.Polyline({
+    		              map: map,
+    		    path: pathArr,
+    		    strokeColor: linecolor,//线颜色
+    		    strokeOpacity: opacity,//线透明度
+    		    strokeWeight: 2//线宽
+    		    });
+        }}
 
-    lineSearchGeneral('苏州','轨道交通1号线',"#63cb8f");
-    lineSearchGeneral('苏州','轨道交通2号线',"#ff0000");
-    lineSearchGeneral('苏州','轨道交通4号线',"#6487c8");
-    lineSearchGeneral('苏州','轨道交通4号线支线',"#6487c8");
-    lineSearchGeneral('苏州','轨道交通3号线',gray); //2019
-    lineSearchGeneral('苏州','轨道交通5号线',gray); //2021
-    lineSearchGeneral('苏州','轨道交通S1号线',gray);
+sh = 1;hf = 0;suz = 1;nt = 0;wx = 0;fz = 0;xm = 0;nc = 0;cz = 0;hz = 1;sx = 0;nj = 0;nb = 0;xz = 0;jn = 0;
+qd = 0;ly = 0;hk = 0;
 
-    lineSearchGeneral('南通','地铁1号线',gray);
-    lineSearchGeneral('南通','地铁2号线',gray);
+if (sh)
+{
+    lineSearch('上海','地铁1号线',"#dc0040");
+    lineSearch('上海','地铁2号线',"#8cc745");
+    lineSearch('上海','地铁2号线东延线',"#8cc745");
+    lineSearch('上海','地铁3号线',"#f2d12b");
+    lineSearch('上海','地铁4号线',"#52288a");
+    lineSearch('上海','地铁5号线',"#8c51a0");
+    lineSearch('上海','地铁6号线',"#cc0074");
+    lineSearch('上海','地铁7号线',"#e76b32");
+    lineSearch('上海','地铁8号线',"#459cd8");
+    lineSearch('上海','地铁9号线',"#88c7ec");
+    lineMultiSearch('上海','地铁10号线',"#baa4d0");
+    lineMultiSearch('上海','地铁11号线',"#761e36");
+    lineSearch('上海','地铁12号线',"#2b7a60");
+    lineSearch('上海','地铁13号线',"#ba79a2");
+    lineSearch('上海','地铁16号线',"#a7d5c4");
+    lineSearch('上海','地铁17号线',"#b8767a");  
+    lineSearch('上海','浦江线',"#7f899a");
+    lineSearch('上海','磁悬浮',"#009597");
+    lineSearch('上海','地铁5号线南延伸段',"#8c51a0");
+    lineSearch('上海','地铁13号线二期',"#ba79a2");
+    lineSearch('上海','金山铁路',commuter);
 
-    lineSearchGeneral('无锡','地铁1号线',"#eb001c");
-    lineSearchGeneral('无锡','地铁2号线',"#00bd47");
-    lineSearchGeneral('无锡','地铁3号线',gray);
-    lineSearchGeneral('无锡','地铁4号线',gray);
+    lineSearch('上海','地铁10号线二期',planned);
+    lineSearch('上海','地铁14号线',planned);
+    lineSearch('上海','地铁15号线',planned);
+    lineSearch('上海','地铁18号线',planned);
+}
 
-    lineSearchGeneral('常州','地铁1号线',gray); // 2019
-    lineSearchGeneral('常州','地铁2号线',gray); // 2020
+if (hf)
+{
+    lineSearch('合肥','轨道交通1号线',"#f25f76");
+    lineSearch('合肥','轨道交通2号线',"#2a7ada");
+    lineSearch('合肥','轨道交通1号线三期',planned);
+    lineSearch('合肥','轨道交通3号线',planned);
+    lineSearch('合肥','轨道交通4号线',planned);
+    lineSearch('合肥','轨道交通5号线',planned);
+}
 
-    lineSearchGeneral('杭州','地铁1号线',"#f25f76");
-    lineSearchGeneral('杭州','地铁2号线',"#e47c42");
-    lineSearchGeneral('杭州','地铁4号线',"#00e051");
-    lineSearchGeneral('杭州','地铁5号线',gray); // 2019
-    lineSearchGeneral('杭州','地铁6号线',gray); // 2020
-    lineSearchGeneral('杭州','地铁9号线',gray); // 2020
-    lineSearchGeneral('杭州','地铁3号线',gray); // 2019
-    lineSearchGeneral('杭州','地铁7号线',gray); // 2020
-    lineSearchGeneral('杭州','地铁8号线',gray); // 2020
+if (suz)
+{
+    lineSearch('苏州','轨道交通1号线',"#63cb8f");
+    lineSearch('苏州','轨道交通2号线',"#ff0000");
+    lineSearch('苏州','轨道交通4号线',"#6487c8");
+    lineSearch('苏州','轨道交通4号线支线',"#6487c8");
+    lineSearch('苏州','轨道交通3号线',planned);
+    lineSearch('苏州','轨道交通5号线',planned);
+    lineSearch('苏州','轨道交通S1号线',planned);
+}
 
-    lineSearchGeneral('绍兴','轨道交通1号线',gray);
+if (nt)
+{
+    lineSearch('南通','地铁1号线',planned);
+    lineSearch('南通','地铁1号线二期',planned);
+    lineSearch('南通','地铁2号线',planned);
+}
 
-    lineSearchGeneral('南京','地铁1号线',"#607fb8");
-    lineSearchGeneral('南京','地铁2号线',"#bc6473");
-    lineSearchGeneral('南京','地铁3号线',"#5dbd98");
-    lineSearchGeneral('南京','地铁4号线',"#a764c3");
-    lineSearchGeneral('南京','地铁10号线',"#c49865");
-    lineSearchGeneral('南京','地铁S1号线',"#68d4c6");
-    lineSearchGeneral('南京','地铁S3号线',"#ee00b3");
-    lineSearchGeneral('南京','地铁S7号线',"#c881ac");
-    lineSearchGeneral('南京','地铁S8号线',"#e47c42");
-    lineSearchGeneral('南京','地铁S9号线',"#b7af92");
+if (wx)
+{
+    lineSearch('无锡','地铁1号线',"#eb001c");
+    lineMultiSearch('无锡','地铁2号线',"#00bd47");
+    lineSearch('无锡','地铁1号线南延线',planned);
+    lineSearch('无锡','地铁3号线',planned);
+    lineSearch('无锡','地铁4号线',planned);
+}
 
-    //lineSearchGeneral('南京','地铁7号线',gray); // 2021
-    lineSearchGeneral('南京','地铁5号线',gray); // 2022
-    lineSearchGeneral('南京','(规划)地铁6号线',gray); // 2022
-    lineSearchGeneral('南京','地铁S5号线',gray);
-    lineSearchGeneral('南京','地铁S6号线',gray);
-    //lineSearchGeneral('南京','地铁9号线',gray);
-    lineSearchGeneral('南京','地铁11号线',gray);
+if (fz)
+{  
+    lineSearch('福州','地铁1号线',"#f25f76");
+    lineSearch('福州','地铁2号线',planned);
+    lineSearch('福州','地铁4号线',planned);
+    lineSearch('福州','地铁5号线',planned);
+    lineSearch('福州','地铁6号线',planned);
+    lineSearch('福州','地铁1号线延线',planned);
+}
 
-    lineSearchGeneral('宁波','轨道交通1号线',"#2e73b5");
-    lineSearchGeneral('宁波','轨道交通2号线',"#fa0038");
-    lineSearchGeneral('宁波','轨道交通3号线',gray);
-    lineSearchGeneral('宁波','轨道交通4号线',gray);
-    lineSearchGeneral('宁波','轨道交通5号线',gray);
+if (xm)
+{  
+    lineSearch('厦门','地铁1号线',"#fa752f");
+    lineSearch('厦门','地铁2号线',planned);
+    lineSearch('厦门','地铁3号线',planned);
+    lineSearch('厦门','地铁4号线',planned);
+    lineSearch('厦门','地铁6号线',planned);
+}
 
-    lineSearchGeneral('徐州','地铁1号线',gray);
-    lineSearchGeneral('徐州','地铁2号线',gray);
-    lineSearchGeneral('徐州','地铁3号线',gray);
+if (nc)
+{
+    lineSearch('南昌','地铁1号线',"#f25f76");
+    lineSearch('南昌','地铁2号线',"#f3c51e");
+    lineSearch('南昌','地铁2号线一期',planned);
+    lineSearch('南昌','地铁3号线',planned);
+    lineSearch('南昌','地铁4号线',planned);
+}
+
+if (cz)
+{
+    lineSearch('常州','地铁1号线',planned); 
+    lineSearch('常州','地铁2号线',planned); 
+}
+
+if (hz)
+{
+    lineSearch('杭州','地铁1号线',"#f25f76");
+    lineSearch('杭州','地铁2号线',"#e47c42");
+    lineSearch('杭州','地铁4号线',"#00e051");
+    lineSearch('杭州','地铁5号线',planned); 
+    lineSearch('杭州','地铁6号线',planned); 
+    lineSearch('杭州','地铁9号线',planned); 
+    lineSearch('杭州','地铁3号线',planned); 
+    lineSearch('杭州','地铁7号线',planned); 
+    lineSearch('杭州','地铁8号线',planned);
+    lineSearch('杭州','富阳线',planned); 
+}
+
+if (sx)
+{
+    lineSearch('绍兴','轨道交通1号线',planned);
+    lineSearch('绍兴','轨道交通1号线支线',planned);
+}
+
+if (nj)
+{
+    lineSearch('南京','地铁1号线',"#607fb8");
+    lineSearch('南京','地铁2号线',"#bc6473");
+    lineSearch('南京','地铁3号线',"#5dbd98");
+    lineSearch('南京','地铁4号线',"#a764c3");
+    lineSearch('南京','地铁10号线',"#c49865");
+    lineSearch('南京','地铁S1号线',"#68d4c6");
+    lineSearch('南京','地铁S3号线',"#ee00b3");
+    lineSearch('南京','地铁S7号线',"#c881ac");
+    lineSearch('南京','地铁S8号线',"#e47c42");
+    lineSearch('南京','地铁S9号线',"#b7af92");
+
+    lineSearch('南京','地铁1号线北延线',planned); 
+    lineSearch('南京','地铁7号线',planned); 
+    lineSearch('南京','地铁5号线',planned); 
+    lineSearch('南京','(规划)地铁6号线',planned);
+    lineSearch('南京','地铁S5号线',planned);
+    lineSearch('南京','地铁S6号线',planned);
+    lineSearch('南京','地铁9号线',planned);
+    lineSearch('南京','地铁11号线',planned);
+    lineSearch('南京','地铁S8号线南延',planned);
+    lineSearch('南京','地铁2号线西延线',planned);
+}
+
+if (nb)
+{
+    lineSearch('宁波','轨道交通1号线',"#2e73b5");
+    lineSearch('宁波','轨道交通2号线',"#fa0038");
+    lineSearch('宁波','城际铁路S1线',commuter);
+    lineSearch('宁波','轨道交通3号线',planned);
+    lineSearch('宁波','轨道交通4号线',planned);
+    lineSearch('宁波','轨道交通5号线',planned);
+}
+
+if (xz)
+{  
+    lineSearch('徐州','地铁1号线',planned);
+    lineSearch('徐州','地铁2号线',planned);
+    lineSearch('徐州','地铁3号线',planned);
+}
+
+if (jn)
+{
+    lineSearch('济南','轨道交通R1线',planned);
+    lineSearch('济南','轨道交通R2线',planned);
+    lineSearch('济南','轨道交通R3线',planned);
+}
+
+if (qd)
+{
+    lineSearch('青岛','地铁2号线',"#f32e5a");
+    lineSearch('青岛','地铁3号线',"#00adc8");
+    lineMultiSearch('青岛','地铁11号线',"#4c79da");
+
+    lineSearch('青岛','地铁1号线',planned);
+    lineSearch('青岛','地铁4号线',planned);
+    lineSearch('青岛','地铁7号线',planned);
+    lineSearch('青岛','地铁8号线',planned);
+    lineSearch('青岛','地铁2号线二期',planned);
+    lineSearch('青岛','地铁13号线',planned);
+}
+
+if (ly)
+{
+    lineSearch('洛阳','地铁1号线',planned);
+    lineSearch('洛阳','地铁2号线',planned);
+}
+
+if (hk)
+{
+    lineSearch('香港','迪士尼綫',"#ff00a4");
+    //lineSearch('香港','港島綫', "#0f66c3"); // ???
+    lineSearch('香港','南港島綫', "#71c13a");
+    lineSearch('香港','西鐵綫', "#e033af");
+    lineSearch('香港','荃灣綫', "#f25f76");
+    lineMultiSearch('香港','將軍澳綫', "#964bb6");
+    lineSearch('香港','東涌綫', "#e6a723");
+    lineMultiSearch('香港','東鐵綫', "#00adc8");
+    lineSearch('香港','機場快綫', "#00cab0");
+    lineSearch('香港','觀塘綫', "#00cf59");
+    lineSearch('香港','馬鞍山綫', "#e47c42");
+}
+/*
+sz = 1;
+if (sz)
+{
+    lineSearch('深圳','地铁1号线(罗宝线)', planned);
+    lineSearch('深圳','地铁2号线(蛇口线)', planned);
+    lineSearch('深圳','地铁3号线(龙岗线)', planned);
+    lineSearch('深圳','地铁4号线(龙华线)', planned);
+    lineSearch('深圳','地铁5号线(环中线)', planned);
+    lineSearch('深圳','地铁7号线', planned);
+    lineSearch('深圳','地铁9号线', planned);
+    lineSearch('深圳','地铁11号线', planned);
+
+    lineSearch('深圳','地铁5号线南延线', planned);
+    lineSearch('深圳','地铁9号线西延线', planned);
+    lineSearch('深圳','地铁6号线(光明线)', planned);
+    lineSearch('深圳','地铁6号支线', planned);
+    lineSearch('深圳','地铁3号线南延线', planned);
+    lineSearch('深圳','地铁2号线东延线', planned);
+    lineSearch('深圳','地铁4号线北延线', planned);
+    lineSearch('深圳','地铁3号线东延线', planned);
+    lineSearch('深圳','地铁8号线', planned);
+    lineSearch('深圳','地铁10号线(坂田线)', planned);
+    lineSearch('深圳','地铁12号线(南宝线)', planned);
+    lineSearch('深圳','地铁13号线(石岩线)', planned);
+    lineSearch('深圳','地铁14号线(东部快线)', planned);
+    lineSearch('深圳','地铁16号线(龙坪线)', planned);
+    lineSearch('深圳','地铁20号线', planned);
+    lineSearch('深圳','地铁32号线', planned);
+}
+
+dg = 1;
+if (dg)
+{
+    lineSearch('东莞','轨道交通2号线', planned);
+    
+    lineSearch('东莞','轨道交通1号线', planned);
+}
+
+gz = 1;
+if (gz)
+{
+    lineSearch('广州','地铁1号线', planned);
+    lineSearch('广州','地铁2号线', planned);
+    lineSearch('广州','地铁3号线', planned);
+    lineSearch('广州','地铁3号线(北延段)', planned);
+    lineSearch('广州','地铁4号线', planned);
+    lineSearch('广州','地铁5号线', planned);
+    lineSearch('广州','地铁6号线', planned);
+    lineSearch('广州','地铁7号线', planned);
+    lineSearch('广州','地铁8号线', planned);
+    lineSearch('广州','地铁9号线', planned);
+    lineSearch('广州','地铁13号线', planned);
+    lineSearch('广州','地铁14号线支线(知识城线)', planned);
+    lineSearch('广州','APM线', planned);
+    lineSearch('广州','广佛线', planned);
+}
+*/
 </script>
 </body>
 </html>
