@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+<script type="text/javascript">
+</script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <style type="text/css">
+      html,body,.map{
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+      }
+    </style>
+    <title>地级市覆盖地图</title>
+  </head>
+  <body>
+    <div id="container" class="map" tabindex="0"></div>
+<script language="javascript" src="https://webapi.amap.com/maps?v=1.4.11&key=6d7069d19c84667b9fa784007a4f93f9&plugin=Map3D,AMap.DistrictLayer,AMap.Scale,AMap.ToolBar"></script>
+<script type="text/javascript">
+
+var SOC = 'CHN'
+var colorsCity = {};
+var colorsProvince = {};
+var City = {
+    '350100':1,  //福州
+    '350900':1,  //宁德
+    '341000':1,  //黄山
+    '330300':1,  //温州
+    '330200':1,  //宁波
+    '330900':1,  //舟山
+    '330100':1,  //杭州
+    '350800':1,  //龙岩
+    '350600':1,  //漳州
+    '350700':1,  //南平
+    '440100':1,  //广州
+    '110000':1,  //北京
+    '350200':1,  //厦门
+    '450300':1,  //桂林
+    '360600':1,  //鹰潭
+    '120000':1,  //天津
+    '340100':1,  //合肥
+    '340800':1,  //安庆
+    '341700':1,  //池州
+    '130300':1,  //秦皇岛
+    '140100':1,  //太原
+    '610100':1,  //西安
+    '610500':1,  //渭南
+    '610700':1,  //汉中
+    '130800':1,  //承德
+    '140700':1,  //晋中
+    '370200':1,  //青岛
+    '370900':1,  //泰安
+    '310000':1,  //上海
+    '320500':1,  //苏州
+    '232700':1,  //大兴安岭
+    '230100':1,  //哈尔滨
+    '222400':1,  //延边
+    '210100':1,  //沈阳
+    '220200':1,  //吉林
+    '320100':1,  //南京
+    '140500':1,  //晋城
+    '410800':1,  //焦作
+    '410300':1,  //洛阳
+    '410100':1,  //郑州
+    '210700':1,  //锦州
+    '150100':1,  //呼和浩特
+    '150900':1,  //乌兰察布
+    '150200':1,  //包头
+    '150600':1,  //鄂尔多斯
+    '330600':1,  //绍兴
+    '361100':1,  //上饶
+    '430100':1,  //长沙
+    '430800':1,  //张家界
+    '433100':1,  //湘西
+    '620900':1,  //酒泉
+    '620100':1,  //兰州
+    '630100':1,  //西宁
+    '632500':1,  //海南
+    '632200':1,  //海北
+    '630200':1,  //海东
+    '350500':1,  //泉州
+    '130700':1,  //张家口
+    '130600':1,  //保定
+    '350400':1,  //三明
+    '522600':1,  //黔东南
+    '530100':1,  //昆明
+    '510400':1,  //攀枝花
+    '510100':1,  //成都
+    '510700':1,  //绵阳
+    '511100':1,  //乐山
+    '513200':1,  //阿坝
+    '510800':1,  //广元
+    '210500':1,  //本溪
+    '610600':1,  //延安
+    '420100':1,  //武汉
+    '131000':1,  //廊坊
+    '140200':1,  //大同
+    '810000':1,  //香港
+    '440300':1,  //深圳
+    '532900':1,  //大理
+    '530700':1,  //丽江
+    '513400':1,  //凉山
+    '370300':1,  //淄博
+    '640100':1,  //银川
+    '640500':1,  //中卫
+    '152900':1,  //阿拉善
+    '130100':1,  //石家庄
+    '211400':1,  //葫芦岛
+    '440400':1,  //珠海
+    '820000':1,  //澳门
+    '130800':1,  //承德
+    '430300':1,  //湘潭
+    '350300':1,  //莆田
+    '320300':1,  //徐州
+    '320700':1,  //连云港
+    '371200':1,  //莱芜
+    '360400':1,  //九江
+    '370100':1,  //济南
+    '540100':1,  //拉萨
+    '632800':1,  //海西
+    '620700':1,  //张掖
+    '431200':1,  //怀化
+    '330700':1,  //金华
+    '330800':1,  //衢州
+    '360100':1,  //南昌
+    '370800':1,  //济宁
+    '210200':1,  //大连
+    '320600':1,  //南通
+    '371000':1,  //威海
+    '650100':1,  //乌鲁木齐
+    '652700':1,  //博尔塔拉
+    '654000':1,  //伊犁
+    '653100':1,  //喀什
+    '653000':1,  //克孜勒苏
+}
+
+var Province = {
+    '520000':1,  //贵州
+    '540000':1,  //西藏
+    '530000':1,  //云南 
+    '360000':1,  //江西
+    '340000':1,  //安徽
+    '510000':1,  //四川
+    '350000':1,  //福建
+    '430000':1,  //湖南
+    '420000':1,  //湖北
+    '410000':1,  //河南
+    '330000':1,  //浙江
+    '640000':1,  //宁夏
+    '650000':1,  //新疆
+    '440000':1,  //广东
+    '370000':1,  //山东
+    '450000':1,  //广西
+    '630000':1,  //青海
+    '320000':1,  //江苏
+    '140000':1,  //山西
+    '310000':1,  //上海
+    '110000':1,  //北京
+    '130000':1,  //河北
+    '230000':1,  //黑龙江
+    '220000':1,  //吉林
+    '210000':1,  //辽宁
+    '150000':1,  //内蒙古
+    '120000':1,  //天津
+    '620000':1,  //甘肃
+    '610000':1,  //甘肃
+}
+
+var getColorByCity = function(adcode){
+    if(!colorsCity[adcode]){
+        var result = City[adcode];
+        if(!result){
+            colorsCity[adcode] = 'rgb(255,255,255)'
+        }else{
+            colorsCity[adcode] = 'rgb(50,50,200)'
+        }
+    }
+    return colorsCity[adcode]
+}
+
+var getColorByProvince = function(adcode){
+    if(!colorsProvince[adcode]){
+        var result = Province[adcode];
+        if(!result){
+            colorsProvince[adcode] = 'rgb(255,255,255)'
+        }else{
+            colorsProvince[adcode] = 'rgb(50,50,250)'
+        }
+    }
+    return colorsProvince[adcode]
+}
+
+var disCountry = new AMap.DistrictLayer.Country({
+    zIndex:12,
+    depth:3,
+    opacity:0.5,
+    styles:{
+        'fill':function(props){
+           return getColorByCity(props.adcode_cit)
+        }
+    }
+})
+
+var disProvince = new AMap.DistrictLayer.Country({
+    zIndex:10,
+    SOC:'CHN',
+    depth:2,
+    opacity:0.5,
+    styles:{
+        'fill':function(props){
+           return getColorByProvince(props.adcode_pro)
+        }
+    }
+})
+
+var map = new AMap.Map("container",{
+        zooms: [3, 10],
+        showIndoorMap:false,
+        zoom: 3,
+        isHotspot:false,
+        defaultCursor:'pointer',
+        touchZoomCenter:1,
+        pitch: 0,
+        layers:[
+            disCountry,
+            disProvince,
+        ],
+        viewMode:'3D',
+        resizeEnable: true
+})
+map.addControl(new AMap.Scale());
+map.addControl(new AMap.ToolBar({liteStyle:true}));
+</script>
+</body>  
+</html>
