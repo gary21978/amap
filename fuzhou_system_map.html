@@ -1,0 +1,95 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>Fuzhou bus</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://webapi.amap.com/maps?v=1.4.7&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.Driving,AMap.LineSearch"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script language="javascript">
+    // 基本地图加载
+    var map = new AMap.Map("container", {
+        center: [119.30, 26.08],  
+        zoom: 13,
+    });
+    map.setMapStyle('amap://styles/darkblue');
+    map.setFeatures(['bg','road']) //'bg','point','road,
+    // 线路查询
+    function lineSearch(cityname, number,linecolor) {
+        var linesearch = new AMap.LineSearch({
+            pageIndex: 1,
+            city: cityname,
+            pageSize: 1,
+            extensions: 'all'
+        });
+        linesearch.search(number, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                lineSearch_Callback(result,linecolor);
+            } else {
+                alert(number);
+            }
+        });
+    }
+
+    function lineMultiSearch(cityname, number,linecolor) {
+        var linesearch = new AMap.LineSearch({
+            pageIndex: 1,
+            city: cityname,
+            pageSize: 3,
+            extensions: 'all'
+        });
+        linesearch.search(number, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                lineSearch_Callback(result,linecolor);
+            } else {
+                alert(number);
+            }
+        });
+    }
+    
+    /*公交路线查询服务返回数据解析概况*/
+    function lineSearch_Callback(data,linecolor) {
+        var lineArr = data.lineInfo;
+        var lineNum = data.lineInfo.length;
+        for (var j = 0;j < lineNum;++j)
+        {
+            var pathArr = lineArr[j].path;
+            var stops = lineArr[j].via_stops;
+/*
+	        for (var i = 0;i < stops.length;++i)
+            {
+                var circleMarker = new AMap.CircleMarker({
+                            map:map,
+                            center: stops[i].location,
+                            radius: 2,
+                            fillColor:'white',
+                            strokeColor:linecolor,
+                            strokeWeight:2    
+			});}
+*/
+            opacity = 1.0;
+            busPolyline = new AMap.Polyline({
+    		              map: map,
+    		    path: pathArr,
+    		    strokeColor: linecolor,
+    		    strokeOpacity: opacity,
+    		    strokeWeight: 2
+    		    });
+        }}
+
+    var buslist = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,25,26,27,28,29,30,31,35,36,37,39,40,41,42,42,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,95,96,97,98,99,100,101,102,103,105,106,107,108,109,111,112,113,115,116,117,118,121,122,123,124,125,126,127,128,129,130,131,132,133,136,137,138,139,140,141,143,145,147,148,149,150,151,152,153,155,156,157,158,159,160,161,162,163,165,166,167,168,169,170,171,172,173,175,176,177,178,179,180,181,182,183,186,187,188,190,196,197,199,200,201,202,203,205,206,301,302,303,305,306,307,308,309,310,311,312,313,315,316,317,318,319,320];
+    for (var j = 0;j < buslist.length;++j)
+    {
+        color = "#" + parseInt(0xFFF/buslist.length*j).toString(16);
+        lineSearch("福州", buslist[j] + "" + "路", color);
+    }
+
+</script>
+</body>
+</html>
