@@ -7,19 +7,19 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>Fuzhou System Map</title>
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
-    <script src="http://webapi.amap.com/maps?v=1.4.7&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.Driving,AMap.LineSearch"></script>
-    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script src="http://webapi.amap.com/maps?v=1.4.7&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.LineSearch"></script>
 </head>
 <body>
 <div id="container"></div>
 <script language="javascript">
-
     var map = new AMap.Map("container", {
+        //dragEnable: false,
+        //zoomEnable: false,
         center: [119.30, 26.08],  
         zoom: 13,
     });
     map.setMapStyle('amap://styles/darkblue');
-    map.setFeatures(['bg','road','point']);
+    map.setFeatures(['bg']); //,'road','point'
 
     function lineSearch(cityname, number, linecolor) {
         var linesearch = new AMap.LineSearch({
@@ -39,12 +39,21 @@
     
     function lineSearch_Callback(data, number, linecolor) {
         var lineArr = data.lineInfo;
-        var lineNum = data.lineInfo.length;
-        for (var j = 0;j < lineNum;++j)
-        {
-            var pathArr = lineArr[j].path;
-            var stops = lineArr[j].via_stops;
-/*
+        var stops = lineArr[0].via_stops;
+        var busline = new AMap.Polyline({
+                            map: map,
+                            path: lineArr[0].path,
+                            strokeColor: linecolor,
+                            strokeOpacity: 1.0,
+                            strokeWeight: 1});
+        /*
+        var label = new AMap.Text({
+                            text: number,
+                            map: map,
+                            opacity: 1.0,
+                            position: stops[parseInt(stops.length/2)].location});*/        
+ /*
+        var stops = lineArr[0].via_stops;
 	        for (var i = 0;i < stops.length;++i)
             {
                 var circleMarker = new AMap.CircleMarker({
@@ -55,28 +64,11 @@
                             strokeColor:linecolor,
                             strokeWeight:2    
 			});
-			}
-*/
-            var label = new AMap.Text({
-		        text: number,
-		        map: map,
-		        opacity: 0.5,
-		        position: stops[parseInt(stops.length/2)].location
-		    });
-
-            busPolyline = new AMap.Polyline({
-    		    map: map,
-    		    path: pathArr,
-    		    strokeColor: linecolor,
-    		    strokeOpacity: 1.0,
-    		    strokeWeight: 2
-    		    });
-        }}
-
-
+			}*/
+        }
 
     var route = [
-    	'1路', '2路', '3路', '4路', '5路', '6路', '7路', '8路', '9路', '10路', '11路', '12路', '13路', '14路', 
+    	'1路', '2路', '3路','4路', '5路', '6路', '7路', '8路', '9路', '10路', '11路', '12路', '13路', '14路', 
 	    '15路', '16路', '17路', '18路', '19路', '20路', '21路', '22路', '23路', '25路', '26路', '27路', '28路', 
 	    '29路', '30路', '31路', '32路', '33路', '35路', '36路', '37路', '38路', '39路', '40路', '41路', '42路', 
 	    '43路', '45路', '46路', '47路', '48路', '49路', '50路', '51路', '52路', '53路', '54路', '55路', '56路', 
@@ -142,6 +134,7 @@
      N = route.length;
 
      // Generate random permulation
+     /*
      var perm = new Array(N);
      for(var j = 0; j < N; j++)
      {
@@ -154,15 +147,21 @@
         var tmp = perm[j];
         perm[j] = perm[swp];
         perm[swp] = tmp;
-     }
+     }*/
 
     for(var j = 0; j < N; j++)
     {
-        color = "#" + parseInt(0xFFF/N*perm[j]).toString(16);
+        //color = "#" + parseInt(0xFFF/N*perm[j]).toString(16);
+        color = "#" + parseInt(0xFFF*Math.random()).toString(16);
         lineSearch("福州", route[j], color);
     }
 
-
+    document.getElementById("container").style.height= window.innerHeight +"px";
+    document.getElementById("container").style.width= window.innerWidth +"px";
+    
+    var lng = 0, lat = 0;
+    map.setCenter([119.30, 26.08]);
+    map.panBy(winWidth*lng, winHeight*lat);
 </script>
 </body>
 </html>
