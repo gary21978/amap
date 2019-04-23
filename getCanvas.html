@@ -1,0 +1,51 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Fuzhou System Map</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://webapi.amap.com/maps?v=1.4.14&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.LineSearch"></script>
+    <script src="html2canvas.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="container" style="width:120px;height:120px"></div>
+
+<script language="javascript">
+    var map = new AMap.Map("container", {
+        dragEnable: false,
+        zoomEnable: false,
+        center: [119.30, 26.08],  
+        zoom: 13,
+    });
+    map.setMapStyle('amap://styles/fresh');
+    map.setFeatures(['bg']);
+
+    var winHeight=0;
+    if (window.innerHeight)
+        winHeight = window.innerHeight;
+    else if ((document.body) && (document.body.clientHeight))
+        winHeight = document.body.clientHeight;
+    if (document.documentElement && document.documentElement.clientHeight)
+        winHeight = document.documentElement.clientHeight;
+
+    var winWidth=0;
+    if (window.innerWidth)
+        winWidth = window.innerWidth;
+    else if ((document.body) && (document.body.clientWidth))
+        winWidth = document.body.clientWidth;
+    if (document.documentElement && document.documentElement.clientWidth)
+        winWidth = document.documentElement.clientWidth;
+
+    document.getElementById("container").style.height= winHeight +"px";
+    document.getElementById("container").style.width= winWidth +"px";
+    
+    var lng = 0;
+    var lat = 0;
+    map.setCenter([119.30, 26.08]);
+    map.panBy(winWidth*lng, winHeight*lat);
+</script>
+
+</body>
+</html>
