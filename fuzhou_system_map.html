@@ -7,19 +7,26 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>Fuzhou System Map</title>
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
-    <script src="http://webapi.amap.com/maps?v=1.4.7&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.LineSearch"></script>
+    <script src="http://webapi.amap.com/maps?v=1.4.14&key=6d7069d19c84667b9fa784007a4f93f9&plugin=AMap.LineSearch"></script>
 </head>
 <body>
 <div id="container"></div>
 <script language="javascript">
+	var hshift = 0;
+    var vshift = 0;
     var map = new AMap.Map("container", {
         //dragEnable: false,
-        //zoomEnable: false,
+        zoomEnable: false,
         center: [119.30, 26.08],  
-        zoom: 13,
+        zoom: 14,
     });
-    map.setMapStyle('amap://styles/darkblue');
-    map.setFeatures(['bg']); //,'road','point'
+    map.setMapStyle('amap://styles/whitesmoke');
+    map.setFeatures(['bg','road','point']);
+    map.panBy(window.innerWidth*hshift, window.innerHeight*vshift);
+
+    // Set sizes of the div container
+    document.getElementById("container").style.height= window.innerHeight +"px";
+    document.getElementById("container").style.width= window.innerWidth +"px";
 
     function lineSearch(cityname, number, linecolor) {
         var linesearch = new AMap.LineSearch({
@@ -45,14 +52,13 @@
                             path: lineArr[0].path,
                             strokeColor: linecolor,
                             strokeOpacity: 1.0,
-                            strokeWeight: 1});
+                            strokeWeight: 2});
         /*
         var label = new AMap.Text({
                             text: number,
                             map: map,
                             opacity: 1.0,
-                            position: stops[parseInt(stops.length/2)].location});*/        
- /*
+                            position: stops[parseInt(stops.length/2)].location});        
         var stops = lineArr[0].via_stops;
 	        for (var i = 0;i < stops.length;++i)
             {
@@ -131,37 +137,12 @@
     	'江滨专线', '海峡建材城接送班车', '温泉城社区巴士', '滨海1路', '甘蔗-青口', 
     	'闽白专线', '闽运定制59路', '闽都大庄园接驳专线', '马尾定时专线', '鼓岭旅游度假区区间专线2'];
 
-     N = route.length;
-
-     // Generate random permulation
-     /*
-     var perm = new Array(N);
-     for(var j = 0; j < N; j++)
-     {
-         perm[j] = j;
-     }
-  
-     for(var j = 0; j < N; j++)
-     {
-        var swp = j + Math.floor(Math.random() * (N - j));
-        var tmp = perm[j];
-        perm[j] = perm[swp];
-        perm[swp] = tmp;
-     }*/
-
+    N = route.length;
     for(var j = 0; j < N; j++)
     {
-        //color = "#" + parseInt(0xFFF/N*perm[j]).toString(16);
         color = "#" + parseInt(0xFFF*Math.random()).toString(16);
         lineSearch("福州", route[j], color);
     }
-
-    document.getElementById("container").style.height= window.innerHeight +"px";
-    document.getElementById("container").style.width= window.innerWidth +"px";
-    
-    var lng = 0, lat = 0;
-    map.setCenter([119.30, 26.08]);
-    map.panBy(winWidth*lng, winHeight*lat);
 </script>
 </body>
 </html>
