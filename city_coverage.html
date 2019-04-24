@@ -1,23 +1,17 @@
 <!doctype html>
-<html lang="en" >
+<html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <script type="text/javascript">
 </script>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <style type="text/css">
-      html,body,.map{
-        width: 100%;
-        height: 100%;
-        margin: 0px;
-      }
-    </style>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
     <title>地级覆盖地图</title>
   </head>
   <body>
     <div id="container" class="map" tabindex="0"></div>
-<script language="javascript" src="https://webapi.amap.com/maps?v=1.4.11&key=6d7069d19c84667b9fa784007a4f93f9&plugin=Map3D,AMap.DistrictLayer,AMap.Scale,AMap.ToolBar"></script>
+<script language="javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=6d7069d19c84667b9fa784007a4f93f9&plugin=Map3D,AMap.DistrictLayer,AMap.Scale,AMap.ToolBar"></script>
 <script type="text/javascript">
 
 var SOC = 'CHN'
@@ -137,10 +131,10 @@ var City = {
     '654000':1,  //伊犁
     '653100':1,  //喀什
     '653000':1,  //克孜勒苏
-    '225000':1,  //扬州
+    '321000':1,  //扬州
     '331000':1,  //台州
     '520100':1,  //贵阳
-    '400000':1,  //重庆
+    '500000':1,  //重庆
     //////////////////////
     '540600':-1,  //那曲
     '650500':-1,  //哈密
@@ -198,6 +192,7 @@ var City = {
     '371500':-1,  //聊城
     '371700':-1,  //菏泽
     '371400':-1,  //德州
+    '371100':-1,  //日照
     '410500':-1,  //安阳
     '410600':-1,  //鹤壁
     '410700':-1,  //新乡
@@ -211,6 +206,7 @@ var City = {
     '411500':-1,  //信阳
     '410400':-1,  //平顶山
     '420200':-1,  //黄石
+    '421100':-1,  //黄冈
     '420300':-1,  //十堰
     '420500':-1,  //宜昌
     '420600':-1,  //襄阳
@@ -266,6 +262,13 @@ var City = {
     '640300':-1,  //吴忠
     '652900':-1,  //阿克苏
     '632700':-1,  //玉树藏族自治州
+    '520300':-1,  //遵义
+    '422800':-1,  //恩施土家族苗族自治州
+    '421000':-1,  //荆州
+    '429004':-1,  //仙桃
+    '429005':-1,  //潜江
+    '429006':-1,  //天门
+    '341500':-1,  //六安
 }
 
 var Province = {
@@ -310,9 +313,9 @@ var getColorByCity = function(adcode){
             colorsCity[adcode] = 'rgb(255,255,255)'
         }else{
             if (result < 0)
-                colorsCity[adcode] = 'rgb(220,220,220)'
+                colorsCity[adcode] = 'rgb(150,150,220)'
             else 
-                colorsCity[adcode] = 'rgb(50,50,200)'
+                colorsCity[adcode] = 'rgb(0,0,220)'
         }
     }
     return colorsCity[adcode]
@@ -357,16 +360,13 @@ var disProvince = new AMap.DistrictLayer.Country({
 })
 
 var map = new AMap.Map("container",{
-        zooms: [3, 10],
         showIndoorMap:false,
-        zoom: 3,
-        isHotspot:false,
-        defaultCursor:'pointer',
-        touchZoomCenter:1,
+        zoom: 5,
+        center: [106, 38],
         pitch: 0,
         layers:[
             disCountry,
-            disProvince,
+           // disProvince,
         ],
         viewMode:'2D',
         resizeEnable: true
